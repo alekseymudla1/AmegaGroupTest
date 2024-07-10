@@ -1,0 +1,34 @@
+﻿using FinancialInstruments.Domain.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FinancialInstruments.Integration.REST
+{
+	public class CryptoClient : ICryptoClient
+	{
+		private readonly string _token;
+
+		public CryptoClient(string token)
+		{
+			_token = token ?? throw new ArgumentNullException(nameof(token));
+		}
+
+		public async Task<Instrument> GetPrice(string ticker, CancellationToken cancellationToken = default)
+		{
+			using (var client = new HttpClient() { BaseAddress = Constants.TiingoCryptoRestUrl })
+			{
+				client.DefaultRequestHeaders.Accept
+					.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
+				var response = await client.GetAsync($@"top?tickers={ticker}&token={_token}");
+				var result = JsonConvert.DeserializeObject<IEnumerable<CryptoDTO>>(await response.Content.ReadAsStringAsync());
+
+				return result.FirstOrDefault().ToInstrument() ?? new Instrument { Ticker = ticker, Price = 0 };
+			}
+		}
+	}
+}
