@@ -17,9 +17,9 @@ namespace FinancialInstruments.Integration.REST
 
 		public IEnumerable<BookDataDTO> TopOfBookData { get; init; }
 
-		public Instrument ToInstrument()
+		public Quote ToQuote()
 		{
-			return new Instrument { Ticker = this.Ticker, Price = TopOfBookData.First().LastPrice };
+			return new Quote { Ticker = this.Ticker, Price = TopOfBookData.First().LastPrice };
 		}
 	}
 }

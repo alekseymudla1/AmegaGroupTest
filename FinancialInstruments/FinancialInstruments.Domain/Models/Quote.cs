@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FinancialInstruments.Domain.Models
 {
-	public class Instrument
+	public class Quote
 	{
 		public string Ticker { get; set; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FinancialInstruments.Integration
 {
-	public interface IInstrumentSources
+	public interface IQuoteSources
 	{
 		Task<Source> GetSource(string ticker);
 	}

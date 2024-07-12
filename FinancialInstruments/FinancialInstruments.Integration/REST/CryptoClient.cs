@@ -18,7 +18,7 @@ namespace FinancialInstruments.Integration.REST
 			_token = token ?? throw new ArgumentNullException(nameof(token));
 		}
 
-		public async Task<Instrument> GetPrice(string ticker, CancellationToken cancellationToken = default)
+		public async Task<Quote> GetQuote(string ticker, CancellationToken cancellationToken = default)
 		{
 			using (var client = new HttpClient() { BaseAddress = Constants.TiingoCryptoRestUrl })
 			{
@@ -27,7 +27,7 @@ namespace FinancialInstruments.Integration.REST
 				var response = await client.GetAsync($@"top?tickers={ticker}&token={_token}");
 				var result = JsonConvert.DeserializeObject<IEnumerable<CryptoDTO>>(await response.Content.ReadAsStringAsync());
 
-				return result.FirstOrDefault().ToInstrument() ?? new Instrument { Ticker = ticker, Price = 0 };
+				return result.FirstOrDefault().ToQuote() ?? new Quote { Ticker = ticker, Price = 0 };
 			}
 		}
 	}

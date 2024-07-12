@@ -9,12 +9,12 @@ namespace FinancialInstruments.Api.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class InstrumentController : ControllerBase
+	public class QuotesController : ControllerBase
 	{
-		private readonly IInstrumentsService _instrumentService;
-		public InstrumentController(IInstrumentsService instrumentService)
+		private readonly IQuoteService _quoteService;
+		public QuotesController(IQuoteService quoteService)
 		{
-			_instrumentService = instrumentService;
+			_quoteService = quoteService;
 		}
 
 		[HttpGet]
@@ -25,9 +25,9 @@ namespace FinancialInstruments.Api.Controllers
 		}
 
 		[HttpGet("{ticker}")]
-		public async Task<Instrument> GetPrice(string ticker)
+		public async Task<Quote> GetQuote(string ticker)
 		{
-			return await _instrumentService.GetInstrumentAsync(ticker);
+			return await _quoteService.GetQuoteAsync(ticker);
 		}
 	}
 }

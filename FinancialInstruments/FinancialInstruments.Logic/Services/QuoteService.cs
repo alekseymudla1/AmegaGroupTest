@@ -6,40 +6,40 @@ using Microsoft.Extensions.Options;
 
 namespace FinancialInstruments.Logic.Services
 {
-	public class InstrumentsService : IInstrumentsService
+	public class QuoteService : IQuoteService
 	{
-		private readonly IInstrumentRestClient _instrumentRestClient;
-		private readonly IInstrumentCache _instrumentCache;
-		private readonly ILogger<InstrumentsService> _logger;
+		private readonly IQuoteRestClient _quoteRestClient;
+		private readonly IQuoteCache _quoteCache;
+		private readonly ILogger<QuoteService> _logger;
 		private readonly ClientTimeout _clientTimeout;
 
-		public InstrumentsService(IInstrumentRestClient instrumentRestClient, 
-			IInstrumentCache instrumentCache, 
-			ILogger<InstrumentsService> logger,
+		public QuoteService(IQuoteRestClient quoteRestClient, 
+			IQuoteCache quoteCache, 
+			ILogger<QuoteService> logger,
 			IOptions<ClientTimeout> options)
 		{
-			_instrumentRestClient = instrumentRestClient;
-			_instrumentCache = instrumentCache;
+			_quoteRestClient = quoteRestClient;
+			_quoteCache = quoteCache;
 			_logger = logger;
 			_clientTimeout = options.Value;
 		}
 
-		public async Task<Instrument> GetInstrumentAsync(string ticker)
+		public async Task<Quote> GetQuoteAsync(string ticker)
 		{
 			// if data receiving takes too long or exception is thrown, we take data from cache
 			// anyway cache is updated after data receiving is succeded
 			Task.WaitAny(Task.Delay(_clientTimeout.Timeout), UpdateCache(ticker));
-			return await _instrumentCache.GetInstrument(ticker);
+			return await _quoteCache.GetQuote(ticker);
 		}
 
 		private async Task UpdateCache(string ticker)
 		{
 			try
 			{
-				var data = await _instrumentRestClient.GetPrice(ticker);
+				var data = await _quoteRestClient.GetQuote(ticker);
 				if (data != null)
 				{
-					await _instrumentCache.SaveInstrument(data);
+					await _quoteCache.SaveQuote(data);
 				}
 			}
 			catch (Exception ex)

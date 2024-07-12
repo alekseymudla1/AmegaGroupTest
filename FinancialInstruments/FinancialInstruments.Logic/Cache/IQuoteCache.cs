@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinancialInstruments.Domain.Interfaces
+namespace FinancialInstruments.Logic.Cache
 {
-	public interface IInstrumentRestClient
+	public interface IQuoteCache
 	{
-		Task<Instrument> GetPrice(string ticker, CancellationToken cancellationToken = default);
+		Task SaveQuote(Quote quote);
+
+		Task<Quote> GetQuote(string ticker);
 	}
 }

@@ -2,8 +2,8 @@
 
 namespace FinancialInstruments.Logic.Services
 {
-	public interface IInstrumentsService
+	public interface IQuoteService
 	{
-		Task<Instrument> GetInstrumentAsync(string ticker);
+		Task<Quote> GetQuoteAsync(string ticker);
 	}
 }

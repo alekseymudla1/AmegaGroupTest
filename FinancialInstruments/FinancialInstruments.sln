@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialInstruments.Integr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialInstruments.Domain", "FinancialInstruments.Domain\FinancialInstruments.Domain.csproj", "{FB491672-9E2D-4E30-AA65-9EDD361C15D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialInstruments.Logic", "Logic\FinancialInstruments.Logic.csproj", "{1126513C-6A8B-4AA4-8525-707BEB902CB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialInstruments.Logic", "FinancialInstruments.Logic\FinancialInstruments.Logic.csproj", "{F5802002-436A-43EC-823E-7758920DE817}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{FB491672-9E2D-4E30-AA65-9EDD361C15D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB491672-9E2D-4E30-AA65-9EDD361C15D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB491672-9E2D-4E30-AA65-9EDD361C15D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1126513C-6A8B-4AA4-8525-707BEB902CB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1126513C-6A8B-4AA4-8525-707BEB902CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1126513C-6A8B-4AA4-8525-707BEB902CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1126513C-6A8B-4AA4-8525-707BEB902CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5802002-436A-43EC-823E-7758920DE817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5802002-436A-43EC-823E-7758920DE817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5802002-436A-43EC-823E-7758920DE817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5802002-436A-43EC-823E-7758920DE817}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

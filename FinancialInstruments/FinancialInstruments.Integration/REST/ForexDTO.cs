@@ -23,9 +23,9 @@ namespace FinancialInstruments.Integration.REST
 
 		public decimal MidPrice { get; init; }
 
-		public Instrument ToInstrument()
+		public Quote ToQuote()
 		{
-			return new Instrument()
+			return new Quote()
 			{
 				Ticker = this.Ticker,
 				Price = this.MidPrice

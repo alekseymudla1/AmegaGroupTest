@@ -4,6 +4,6 @@ namespace FinancialInstruments.Integration.REST
 {
 	public interface IRestClient
 	{
-		Task<Instrument> GetPrice(string ticker, CancellationToken cancellationToken = default);
+		Task<Quote> GetQuote(string ticker, CancellationToken cancellationToken = default);
 	}
 }
