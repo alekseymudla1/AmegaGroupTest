@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="WebSocket\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FinancialInstruments.Domain\FinancialInstruments.Domain.csproj" />
+    <ProjectReference Include="..\FinancialInstruments.Logic\FinancialInstruments.Logic.csproj" />
   </ItemGroup>
 
 </Project>

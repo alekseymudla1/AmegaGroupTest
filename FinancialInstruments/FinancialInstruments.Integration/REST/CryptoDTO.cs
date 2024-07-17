@@ -17,6 +17,8 @@ namespace FinancialInstruments.Integration.REST
 
 		public IEnumerable<BookDataDTO> TopOfBookData { get; init; }
 
+		// I prefer use methods and constructors instead of Automapper,
+		// but company's codestyle is more important for me
 		public Quote ToQuote()
 		{
 			return new Quote { Ticker = this.Ticker, Price = TopOfBookData.First().LastPrice };

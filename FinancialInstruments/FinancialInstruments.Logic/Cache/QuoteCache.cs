@@ -1,5 +1,6 @@
 ﻿using FinancialInstruments.Domain.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace FinancialInstruments.Logic.Cache
 {
 	public class QuoteCache : IQuoteCache
 	{
-		private readonly Dictionary<string, Quote> _quotes = new Dictionary<string, Quote>();
+		private readonly ConcurrentDictionary<string, Quote> _quotes = new ConcurrentDictionary<string, Quote>();
 		public QuoteCache() { }
 
 		public async Task<Quote> GetQuote(string ticker)
@@ -19,14 +20,7 @@ namespace FinancialInstruments.Logic.Cache
 
 		public async Task SaveQuote(Quote quote)
 		{
-			if(_quotes.ContainsKey(quote.Ticker))
-			{
-				_quotes[quote.Ticker] = quote;
-			}
-			else
-			{
-				_quotes.Add(quote.Ticker, quote);
-			}
+			_quotes.AddOrUpdate(quote.Ticker, _ => quote, (ticker, oldQuote) => quote);
 		}
 	}
 }

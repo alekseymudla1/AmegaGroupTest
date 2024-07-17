@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinancialInstruments.Domain.Models
+namespace FinancialInstruments.Domain.Interfaces
 {
-	public class Quote
+	public interface IWebSocketClient
 	{
-		public string Ticker { get; set; }
+		Task Connect();
 
-		public double Price { get; set; }
+		Task Subscribe(string ticker);
 	}
 }

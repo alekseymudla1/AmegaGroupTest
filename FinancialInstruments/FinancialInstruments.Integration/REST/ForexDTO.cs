@@ -13,16 +13,18 @@ namespace FinancialInstruments.Integration.REST
 
 		public DateTime QuoteTimestamp { get; init; }
 
-		public decimal BidPrice { get; init; }
+		public double BidPrice { get; init; }
 
 		public long BidSize { get; init; }
 
-		public decimal AskPrice { get; init; }
+		public double AskPrice { get; init; }
 
 		public long AskSize { get; init; }
 
-		public decimal MidPrice { get; init; }
+		public double MidPrice { get; init; }
 
+		// I prefer use methods and constructors instead of Automapper,
+		// but company's codestyle is more important for me
 		public Quote ToQuote()
 		{
 			return new Quote()

@@ -5,9 +5,9 @@ VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialInstruments.Api", "FinancialInstruments.Api\FinancialInstruments.Api.csproj", "{EF53EA1B-54E5-48E7-A17E-BABE0CE32490}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialInstruments.Integration", "FinancialInstruments.Integration\FinancialInstruments.Integration.csproj", "{C231B1A7-647B-433D-992A-AE1247143AD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialInstruments.Integration", "FinancialInstruments.Integration\FinancialInstruments.Integration.csproj", "{C231B1A7-647B-433D-992A-AE1247143AD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialInstruments.Domain", "FinancialInstruments.Domain\FinancialInstruments.Domain.csproj", "{FB491672-9E2D-4E30-AA65-9EDD361C15D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialInstruments.Domain", "FinancialInstruments.Domain\FinancialInstruments.Domain.csproj", "{FB491672-9E2D-4E30-AA65-9EDD361C15D0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialInstruments.Logic", "FinancialInstruments.Logic\FinancialInstruments.Logic.csproj", "{F5802002-436A-43EC-823E-7758920DE817}"
 EndProject

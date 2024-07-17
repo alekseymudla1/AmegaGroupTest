@@ -12,5 +12,9 @@ namespace FinancialInstruments.Logic.Services
 		Task Subscribe(WebSocket socket, string ticker);
 
 		Task<IEnumerable<WebSocket>> GetWebSocketsForTicker(string ticker);
+
+		Task<IEnumerable<Subscription>> GetAllSubscriptions();
+
+		Task<IEnumerable<string>> GetAllTickers();
 	}
 }

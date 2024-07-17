@@ -12,19 +12,19 @@ namespace FinancialInstruments.Integration.REST
 
 		public DateTime LastSaleTimestamp { get; init; }
 
-		public decimal BidSize { get; init; }
+		public double BidSize { get; init; }
 
-		public decimal BidPrice { get; init; }
+		public double BidPrice { get; init; }
 
-		public decimal AskSize { get; init; }
+		public double AskSize { get; init; }
 
-		public decimal AskPrice { get; init; }
+		public double AskPrice { get; init; }
 
-		public decimal LastSize { get; init; }
+		public double LastSize { get; init; }
 
-		public decimal LastPrice { get; init; }
+		public double LastPrice { get; init; }
 
-		public decimal LastSizeNotional { get; init; }
+		public double LastSizeNotional { get; init; }
 
 		public string BidExchange { get; init; }
 

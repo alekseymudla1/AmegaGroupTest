@@ -5,8 +5,10 @@ using FinancialInstruments.Domain.Interfaces;
 using FinancialInstruments.Domain.Models;
 using FinancialInstruments.Integration;
 using FinancialInstruments.Integration.REST;
+using FinancialInstruments.Integration.WebSocketClient;
 using FinancialInstruments.Logic.Cache;
 using FinancialInstruments.Logic.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json.Serialization;
 
 namespace FinancialInstruments.Api
@@ -39,6 +41,12 @@ namespace FinancialInstruments.Api
 
 			builder.Services.AddSingleton<IWebSocketList, WebSocketList>();
 			builder.Services.AddSingleton<ISubscribtionService, SubscriptionService>();
+			builder.Services.AddSingleton<IQuoteWSCache, QuoteWSCache>();
+			builder.Services.AddSingleton<IWebSocketClient>(services =>
+				new WebSocketClient(
+					services.GetRequiredService<IQuoteSources>(),
+					services.GetRequiredService<IQuoteWSCache>(), 
+					token));
 
 			var app = builder.Build();
 			var webSocketOptions = new WebSocketOptions

@@ -11,5 +11,9 @@ namespace FinancialInstruments.Integration
 		public static Uri TiingoForexRestUrl = new Uri("https://api.tiingo.com/tiingo/fx/");
 
 		public static Uri TiingoCryptoRestUrl = new Uri("https://api.tiingo.com/tiingo/crypto/");
+
+		public static Uri TiingoForexWSUrl = new Uri("wss://api.tiingo.com/fx");
+
+		public static Uri TiingoCryptoWSUrl = new Uri("wss://api.tiingo.com/crypto");
 	}
 }

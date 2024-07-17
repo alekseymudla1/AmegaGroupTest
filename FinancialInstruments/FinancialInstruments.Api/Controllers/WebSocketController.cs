@@ -1,4 +1,5 @@
 ﻿using FinancialInstruments.Api.Infrstructure;
+using FinancialInstruments.Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -12,9 +13,11 @@ namespace FinancialInstruments.Api.Controllers
 	public class WebSocketController : ControllerBase
 	{
 		private readonly IWebSocketList _webSocketlist;
-		public WebSocketController(IWebSocketList webSocketlist)
+		private readonly ISubscribtionService _subscribionService;
+		public WebSocketController(IWebSocketList webSocketlist, ISubscribtionService subscribtionService)
 		{
 			_webSocketlist = webSocketlist;
+			_subscribionService = subscribtionService;
 		}
 
 		public async Task Get()
@@ -32,10 +35,27 @@ namespace FinancialInstruments.Api.Controllers
 				
 				while (!receiveResult.CloseStatus.HasValue)
 				{
-					receiveResult = await webSocket.ReceiveAsync(
-						new ArraySegment<byte>(buffer), CancellationToken.None);
+					var data = Encoding.UTF8.GetString(buffer);
+					try
+					{
+						var request = JsonConvert.DeserializeObject<SubscriptionRequest>(data);
+						if (request is { EventName: "subscribe" })
+						{
+							await _subscribionService.Subscribe(webSocket, request.Ticker);
+							await webSocket.SendAsync(Encoding.UTF8.GetBytes("Subscription succeded"), System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+						}
+					}
+					catch(Exception)
+					{
+						Console.WriteLine("Subscription failed");
+						await webSocket.SendAsync(Encoding.UTF8.GetBytes("Request is failed"), System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+					}
+					finally
+					{
+						receiveResult = await webSocket.ReceiveAsync(
+							new ArraySegment<byte>(buffer), CancellationToken.None);
+					}
 				}
-				//await Echo(webSocket);
 			}
 			else
 			{
