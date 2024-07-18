@@ -8,6 +8,6 @@ namespace FinancialInstruments.Integration.REST
 {
 	public interface IClientFactory
 	{
-		Task<IRestClient> GetClient(Source source);
+		IRestClient GetClient(Source source);
 	}
 }

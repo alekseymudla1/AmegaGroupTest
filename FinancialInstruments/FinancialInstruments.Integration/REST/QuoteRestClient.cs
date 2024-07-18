@@ -25,7 +25,7 @@ namespace FinancialInstruments.Integration.REST
 		private async Task<IRestClient> GetClientByTicker(string ticker)
 		{
 			var source = await _quoteSources.GetSource(ticker);
-			var client = await _clientFactory.GetClient(source);
+			var client = _clientFactory.GetClient(source);
 			return client;
 		}
 	}

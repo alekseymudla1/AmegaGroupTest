@@ -12,6 +12,8 @@
 		};
 		public QuoteSources() { }
 
+		// This method should be async if using some database or another service
+		// to store ticker sources
 		public async Task<Source> GetSource(string ticker)
 		{
 			if (_quoteSourcesDict.ContainsKey(ticker))

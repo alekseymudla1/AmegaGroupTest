@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FinancialInstruments.Domain.Models
 {
-	public class ClientTimeout
+	public class BroadcastOptions
 	{
-		public const string Section = "ClientTimeout";
-		public int Timeout { get; set; }
+		public const string Section = "Broadcast";
+		public int Interval { get; set; }
 	}
 }

@@ -3,6 +3,7 @@ using FinancialInstruments.Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Text;
 
@@ -12,11 +13,9 @@ namespace FinancialInstruments.Api.Controllers
 	[ApiExplorerSettings(IgnoreApi = true)]
 	public class WebSocketController : ControllerBase
 	{
-		private readonly IWebSocketList _webSocketlist;
 		private readonly ISubscribtionService _subscribionService;
-		public WebSocketController(IWebSocketList webSocketlist, ISubscribtionService subscribtionService)
+		public WebSocketController(ISubscribtionService subscribtionService)
 		{
-			_webSocketlist = webSocketlist;
 			_subscribionService = subscribtionService;
 		}
 
@@ -25,7 +24,7 @@ namespace FinancialInstruments.Api.Controllers
 			if (HttpContext.WebSockets.IsWebSocketRequest)
 			{
 				using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-				_webSocketlist.WebSockets.Add(webSocket);
+				
 				var message = Encoding.UTF8.GetBytes("Connected...");
 				await webSocket.SendAsync(message, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
 
@@ -47,8 +46,8 @@ namespace FinancialInstruments.Api.Controllers
 					}
 					catch(Exception)
 					{
-						Console.WriteLine("Subscription failed");
-						await webSocket.SendAsync(Encoding.UTF8.GetBytes("Request is failed"), System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+						Log.Error("Subscription failed");
+						await webSocket.SendAsync(Encoding.UTF8.GetBytes("Subscription failed"), System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
 					}
 					finally
 					{
@@ -60,15 +59,6 @@ namespace FinancialInstruments.Api.Controllers
 			else
 			{
 				HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-			}
-		}
-
-		private async Task Operate(byte[] buffer)
-		{
-			var request = JsonConvert.DeserializeObject<SubscriptionRequest>(Encoding.UTF8.GetString(buffer));
-			if (request.EventName.Equals("subscribe", StringComparison.OrdinalIgnoreCase) && !String.IsNullOrEmpty(request.Ticker))
-			{
-
 			}
 		}
 	}

@@ -11,13 +11,13 @@ namespace FinancialInstruments.Integration.REST
 		private readonly IForexClient _forexClient;
 		private readonly ICryptoClient _cryptoClient;
 
-        public ClientFactory(IForexClient forexClient, ICryptoClient cryptoClient)
-        {
-            _forexClient = forexClient;
+		public ClientFactory(IForexClient forexClient, ICryptoClient cryptoClient)
+		{
+			_forexClient = forexClient;
 			_cryptoClient = cryptoClient;
-        }
+		}
 
-        public async Task<IRestClient> GetClient(Source source)
+		public IRestClient GetClient(Source source)
 		{
 			return source switch
 			{

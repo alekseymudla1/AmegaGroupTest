@@ -1,5 +1,4 @@
 using FinancialInstruments.Api.BackgroundServices;
-using FinancialInstruments.Api.Infrstructure;
 using FinancialInstruments.Api.Middlewares;
 using FinancialInstruments.Domain.Interfaces;
 using FinancialInstruments.Domain.Models;
@@ -8,8 +7,7 @@ using FinancialInstruments.Integration.REST;
 using FinancialInstruments.Integration.WebSocketClient;
 using FinancialInstruments.Logic.Cache;
 using FinancialInstruments.Logic.Services;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json.Serialization;
+using Serilog;
 
 namespace FinancialInstruments.Api
 {
@@ -18,17 +16,26 @@ namespace FinancialInstruments.Api
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
-			
-			var token = builder.Configuration["Token"].ToString();
-			builder.Services.Configure<ClientTimeout>(
-				builder.Configuration.GetSection(ClientTimeout.Section));
+			builder.Host.UseSerilog((context, configuration) =>
+				configuration.ReadFrom.Configuration(context.Configuration));
 
+			// Settings
+			var token = builder.Configuration["Token"].ToString();
+			builder.Services.Configure<ClientTimeoutOptions>(
+				builder.Configuration.GetSection(ClientTimeoutOptions.Section));
+			builder.Services.Configure<BroadcastOptions>(
+				builder.Configuration.GetSection(BroadcastOptions.Section));
+
+			// Hosting service
 			builder.Services.AddHostedService<BroadcastService>();
 
+			// Controllers
 			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
+
+			// REST-part dependencies
 			builder.Services.AddSingleton<IQuoteSources, QuoteSources>();
 			builder.Services.AddTransient<IQuoteRestClient, QuoteRestClient>();
 			builder.Services.AddSingleton<IQuoteCache, QuoteCache>();
@@ -39,7 +46,7 @@ namespace FinancialInstruments.Api
 			builder.Services.AddTransient<ICryptoClient, CryptoClient>(services =>
 				new CryptoClient(token));
 
-			builder.Services.AddSingleton<IWebSocketList, WebSocketList>();
+			// WebSocket-part DI
 			builder.Services.AddSingleton<ISubscribtionService, SubscriptionService>();
 			builder.Services.AddSingleton<IQuoteWSCache, QuoteWSCache>();
 			builder.Services.AddSingleton<IWebSocketClient>(services =>
@@ -48,6 +55,7 @@ namespace FinancialInstruments.Api
 					services.GetRequiredService<IQuoteWSCache>(), 
 					token));
 
+			// Building the app
 			var app = builder.Build();
 			var webSocketOptions = new WebSocketOptions
 			{
@@ -55,27 +63,7 @@ namespace FinancialInstruments.Api
 			};
 
 			app.UseWebSockets(webSocketOptions);
-			//app.Use(async (context, next) =>
-			//{
-			//	if (context.Request.Path == "/ws")
-			//	{
-			//		if (context.WebSockets.IsWebSocketRequest)
-			//		{
-			//			using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-			//			//await Echo(webSocket);
-			//		}
-			//		else
-			//		{
-			//			context.Response.StatusCode = StatusCodes.Status400BadRequest;
-			//		}
-			//	}
-			//	else
-			//	{
-			//		await next(context);
-			//	}
-
-			//});
-
+			
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
@@ -85,51 +73,12 @@ namespace FinancialInstruments.Api
 
 			app.UseHttpsRedirection();
 
-			app.UseAuthorization();
+			app.UseSerilogRequestLogging();
 
-
+			app.UseMiddleware<ExceptionMiddleware>();
 			app.MapControllers();
 
 			app.Run();
-		}
-		//public static void Main(string[] args)
-		//{
-		//	var builder = WebApplication.CreateBuilder(args);
-
-		//	builder.Services.AddControllers();
-
-		//	builder.Services.AddEndpointsApiExplorer();
-
-		//	builder.Services.AddSwaggerGen();
-
-		//	/*builder.Services.ConfigureHttpJsonOptions(options =>
-		//	{
-		//		options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
-		//	});*/
-
-		//	var app = builder.Build();
-		//	if (app.Environment.IsDevelopment())
-		//	{
-		//		app.UseSwagger();
-		//		app.UseSwaggerUI();
-		//	}
-
-		//	app.UseHttpsRedirection();
-
-		//	app.UseAuthorization();
-
-		//	app.Run();
-		//}
+		}	
 	}
-
-	public record Todo(int Id, string? Title, DateOnly? DueBy = null, bool IsComplete = false);
-
-	/*[JsonSerializable(typeof(Todo[]))]
-	[JsonSerializable(typeof(List<string>))]
-	[JsonSerializable(typeof(string[]))]
-	[JsonSerializable(typeof(Instruments))]
-	internal partial class AppJsonSerializerContext : JsonSerializerContext
-	{
-
-	}*/
 }

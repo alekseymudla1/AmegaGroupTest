@@ -2,6 +2,7 @@
 using FinancialInstruments.Domain.Models;
 using FinancialInstruments.Logic.Cache;
 using Newtonsoft.Json;
+using Serilog;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -38,7 +39,7 @@ namespace FinancialInstruments.Integration.WebSocketClient
 				eventData = new { tickers = new List<string>() { ticker } }
 			}, Formatting.Indented);
 
-			Console.WriteLine(message);
+			Log.Information("Subscription message sent to vendor: {@message}", message);
 			await _webSocketClients[source].SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message)), WebSocketMessageType.Binary, true, CancellationToken.None);
 		}
 
@@ -49,7 +50,7 @@ namespace FinancialInstruments.Integration.WebSocketClient
 			{	
 				var webSocket = new ClientWebSocket();
 				await webSocket.ConnectAsync(webSocketUri, CancellationToken.None);
-				Console.WriteLine($@"Connected to {webSocketUri}");
+				Log.Information($@"Connected to {webSocketUri}");
 				_webSocketClients.Add(source, webSocket);
 				var receiveTask = Task.Run(async () =>
 				{
@@ -63,7 +64,7 @@ namespace FinancialInstruments.Integration.WebSocketClient
 						try
 						{
 							var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
-							Console.WriteLine($@"Received: {message}");
+							Log.Information($@"Received: {message}");
 							if (TryDeserializeMessage(message, out var quote))
 							{
 								_quoteWSCache.SaveQuote(quote.Ticker, quote);
@@ -72,14 +73,14 @@ namespace FinancialInstruments.Integration.WebSocketClient
 						}
 						catch (Exception e)
 						{
-							Console.WriteLine($@"Error: {e}");
+							Log.Error($@"Error: {e}");
 						}
 					}
 				});
 			}
 			catch(Exception ex)
 			{
-				Console.WriteLine($@"Failed to connect to {webSocketUri}. Ex: {ex.Message}");
+				Log.Error($@"Failed to connect to {webSocketUri}. Ex: {ex.Message}");
 			}
 		}
 

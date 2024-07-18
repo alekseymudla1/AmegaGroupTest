@@ -1,10 +1,11 @@
 ﻿
+using Serilog;
+
 namespace FinancialInstruments.Api.Middlewares
 {
 	public class ExceptionMiddleware
 	{
 		private readonly RequestDelegate _next;
-
 
 		public ExceptionMiddleware(RequestDelegate next)
 		{
@@ -20,7 +21,7 @@ namespace FinancialInstruments.Api.Middlewares
 			}
 			catch (Exception ex) 
 			{
-				Console.WriteLine(ex.Message);
+				Log.Error("Exception occured: {@ex}", ex);
 				throw;
 			}
 		}
