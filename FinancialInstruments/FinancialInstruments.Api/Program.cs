@@ -41,7 +41,7 @@ namespace FinancialInstruments.Api
 			builder.Services.AddSingleton<IQuoteCache, QuoteCache>();
 			builder.Services.AddTransient<IQuoteService, QuoteService>();
 			builder.Services.AddTransient<IClientFactory, ClientFactory>();
-			builder.Services.AddTransient<IForexClient, ForexClient>(services => 
+			builder.Services.AddTransient<IForexClient, ForexClient>(services =>
 				new ForexClient(token));
 			builder.Services.AddTransient<ICryptoClient, CryptoClient>(services =>
 				new CryptoClient(token));
@@ -52,7 +52,7 @@ namespace FinancialInstruments.Api
 			builder.Services.AddSingleton<IWebSocketClient>(services =>
 				new WebSocketClient(
 					services.GetRequiredService<IQuoteSources>(),
-					services.GetRequiredService<IQuoteWSCache>(), 
+					services.GetRequiredService<IQuoteWSCache>(),
 					token));
 
 			// Building the app
@@ -63,7 +63,7 @@ namespace FinancialInstruments.Api
 			};
 
 			app.UseWebSockets(webSocketOptions);
-			
+
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
@@ -79,6 +79,6 @@ namespace FinancialInstruments.Api
 			app.MapControllers();
 
 			app.Run();
-		}	
+		}
 	}
 }

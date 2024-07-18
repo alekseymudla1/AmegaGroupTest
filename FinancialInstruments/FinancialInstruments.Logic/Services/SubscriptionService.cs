@@ -1,5 +1,4 @@
 ﻿using FinancialInstruments.Domain.Interfaces;
-using System.Linq;
 using System.Net.WebSockets;
 
 namespace FinancialInstruments.Logic.Services

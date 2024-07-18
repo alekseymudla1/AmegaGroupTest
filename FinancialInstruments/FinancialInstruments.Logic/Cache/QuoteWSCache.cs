@@ -1,17 +1,12 @@
 ﻿using FinancialInstruments.Domain.Models;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinancialInstruments.Logic.Cache
 {
 	public class QuoteWSCache : IQuoteWSCache
 	{
 		private readonly ConcurrentDictionary<string, Quote> _quoteDictionary = new ConcurrentDictionary<string, Quote>();
-		
+
 		public QuoteWSCache()
 		{
 

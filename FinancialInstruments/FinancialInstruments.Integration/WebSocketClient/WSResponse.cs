@@ -17,7 +17,7 @@ namespace FinancialInstruments.Integration.WebSocketClient
 			return new Quote()
 			{
 				Ticker = Data[1].ToString(),
-				Price = this.Service switch 
+				Price = this.Service switch
 				{
 					"fx" => (double)Data[4],
 					"crypto_data" => (double)Data[5],

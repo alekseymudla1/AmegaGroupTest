@@ -9,7 +9,7 @@ namespace FinancialInstruments.Integration.REST
 		private readonly IClientFactory _clientFactory;
 
 
-		public QuoteRestClient(IQuoteSources quoteSources, IClientFactory clientFactory) 
+		public QuoteRestClient(IQuoteSources quoteSources, IClientFactory clientFactory)
 		{
 			_quoteSources = quoteSources;
 			_clientFactory = clientFactory;

@@ -1,8 +1,5 @@
-﻿using FinancialInstruments.Domain.Interfaces;
-using FinancialInstruments.Domain.Models;
-using FinancialInstruments.Integration.REST;
+﻿using FinancialInstruments.Domain.Models;
 using FinancialInstruments.Logic.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialInstruments.Api.Controllers
@@ -20,8 +17,8 @@ namespace FinancialInstruments.Api.Controllers
 		[HttpGet]
 		public Instruments GetAll()
 		{
-			var instrumets = new Instruments();
-			return instrumets;
+			var instruments = new Instruments();
+			return instruments;
 		}
 
 		[HttpGet("{ticker}")]

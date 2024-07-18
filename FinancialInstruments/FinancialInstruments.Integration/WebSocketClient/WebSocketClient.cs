@@ -47,7 +47,7 @@ namespace FinancialInstruments.Integration.WebSocketClient
 		{
 			var webSocketUri = GetWSUriBySource(source);
 			try
-			{	
+			{
 				var webSocket = new ClientWebSocket();
 				await webSocket.ConnectAsync(webSocketUri, CancellationToken.None);
 				Log.Information($@"Connected to {webSocketUri}");
@@ -68,7 +68,7 @@ namespace FinancialInstruments.Integration.WebSocketClient
 							if (TryDeserializeMessage(message, out var quote))
 							{
 								_quoteWSCache.SaveQuote(quote.Ticker, quote);
-							}							
+							}
 						}
 						catch (Exception e)
 						{
@@ -77,7 +77,7 @@ namespace FinancialInstruments.Integration.WebSocketClient
 					}
 				});
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Log.Error($@"Failed to connect to {webSocketUri}. Ex: {ex.Message}");
 			}

@@ -1,17 +1,13 @@
-﻿
-using FinancialInstruments.Api.Infrstructure;
-using FinancialInstruments.Domain.Interfaces;
+﻿using FinancialInstruments.Domain.Interfaces;
 using FinancialInstruments.Domain.Models;
-using FinancialInstruments.Integration;
 using FinancialInstruments.Logic.Cache;
 using FinancialInstruments.Logic.Services;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Serilog;
 using System.Collections.Concurrent;
-using System.Text;
 using System.Net.WebSockets;
-using Microsoft.Extensions.Hosting;
+using System.Text;
 
 namespace FinancialInstruments.Api.BackgroundServices
 {
@@ -26,12 +22,12 @@ namespace FinancialInstruments.Api.BackgroundServices
 
 		private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
-		public BroadcastService(ISubscribtionService subscriptionService, 
-			IWebSocketClient webSocketClient, 
+		public BroadcastService(ISubscribtionService subscriptionService,
+			IWebSocketClient webSocketClient,
 			IQuoteWSCache quoteWSCache,
 			IHostApplicationLifetime hostApplicationLifetime,
 			IOptions<BroadcastOptions> broadcastOptions
-			) 
+			)
 		{
 			_subscriptionService = subscriptionService;
 			_webSocketClient = webSocketClient;
@@ -42,7 +38,7 @@ namespace FinancialInstruments.Api.BackgroundServices
 
 		public async Task StartAsync(CancellationToken cancellationToken)
 		{
-			
+
 
 			await base.StartAsync(cancellationToken);
 		}
@@ -52,7 +48,7 @@ namespace FinancialInstruments.Api.BackgroundServices
 		{
 			_hostApplicationLifetime.ApplicationStopping.Register(OnStopping);
 
-			await Task.Delay(START_DELAY);
+			await Task.Delay(START_DELAY); // Just for correct start
 			_webSocketClient.Connect(); // we have no need to wait this
 
 			while (!stoppingToken.IsCancellationRequested)
@@ -81,7 +77,7 @@ namespace FinancialInstruments.Api.BackgroundServices
 				await Task.Delay(_interval);
 			}
 
-			if(stoppingToken.IsCancellationRequested)
+			if (stoppingToken.IsCancellationRequested)
 			{
 				Log.Information("Finish service");
 			}

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FinancialInstruments.Integration
+﻿namespace FinancialInstruments.Integration
 {
 	public enum Source
 	{

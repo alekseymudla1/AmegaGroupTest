@@ -13,8 +13,8 @@ namespace FinancialInstruments.Logic.Services
 		private readonly ILogger<QuoteService> _logger;
 		private readonly ClientTimeoutOptions _clientTimeout;
 
-		public QuoteService(IQuoteRestClient quoteRestClient, 
-			IQuoteCache quoteCache, 
+		public QuoteService(IQuoteRestClient quoteRestClient,
+			IQuoteCache quoteCache,
 			ILogger<QuoteService> logger,
 			IOptions<ClientTimeoutOptions> options)
 		{

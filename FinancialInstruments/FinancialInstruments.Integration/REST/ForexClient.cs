@@ -16,7 +16,7 @@ namespace FinancialInstruments.Integration.REST
 
 		public async Task<Quote> GetQuote(string ticker, CancellationToken cancellationToken = default)
 		{
-			using (var client = new HttpClient() { BaseAddress = Constants.TiingoForexRestUrl } )
+			using (var client = new HttpClient() { BaseAddress = Constants.TiingoForexRestUrl })
 			{
 				client.DefaultRequestHeaders.Accept
 					.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header

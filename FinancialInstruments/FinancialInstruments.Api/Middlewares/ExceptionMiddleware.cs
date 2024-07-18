@@ -19,7 +19,7 @@ namespace FinancialInstruments.Api.Middlewares
 			{
 				await _next(context);
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				Log.Error("Exception occured: {@ex}", ex);
 				throw;

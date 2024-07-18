@@ -1,10 +1,7 @@
-﻿using FinancialInstruments.Api.Infrstructure;
-using FinancialInstruments.Logic.Services;
-using Microsoft.AspNetCore.Http;
+﻿using FinancialInstruments.Logic.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Serilog;
-using System;
 using System.Text;
 
 namespace FinancialInstruments.Api.Controllers
@@ -24,14 +21,14 @@ namespace FinancialInstruments.Api.Controllers
 			if (HttpContext.WebSockets.IsWebSocketRequest)
 			{
 				using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-				
+
 				var message = Encoding.UTF8.GetBytes("Connected...");
 				await webSocket.SendAsync(message, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
 
 				var buffer = new byte[1024 * 4];
 				var receiveResult = await webSocket.ReceiveAsync(
 					new ArraySegment<byte>(buffer), CancellationToken.None);
-				
+
 				while (!receiveResult.CloseStatus.HasValue)
 				{
 					var data = Encoding.UTF8.GetString(buffer);
@@ -44,7 +41,7 @@ namespace FinancialInstruments.Api.Controllers
 							await webSocket.SendAsync(Encoding.UTF8.GetBytes("Subscription succeded"), System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
 						}
 					}
-					catch(Exception)
+					catch (Exception)
 					{
 						Log.Error("Subscription failed");
 						await webSocket.SendAsync(Encoding.UTF8.GetBytes("Subscription failed"), System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
