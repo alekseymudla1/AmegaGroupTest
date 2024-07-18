@@ -68,8 +68,7 @@ namespace FinancialInstruments.Integration.WebSocketClient
 							if (TryDeserializeMessage(message, out var quote))
 							{
 								_quoteWSCache.SaveQuote(quote.Ticker, quote);
-							}
-							
+							}							
 						}
 						catch (Exception e)
 						{

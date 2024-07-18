@@ -7,8 +7,11 @@ using FinancialInstruments.Logic.Cache;
 using FinancialInstruments.Logic.Services;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Serilog;
 using System.Collections.Concurrent;
 using System.Text;
+using System.Net.WebSockets;
+using Microsoft.Extensions.Hosting;
 
 namespace FinancialInstruments.Api.BackgroundServices
 {
@@ -20,20 +23,35 @@ namespace FinancialInstruments.Api.BackgroundServices
 		private readonly IQuoteWSCache _quoteWSCache;
 		private readonly List<string> _tickersSubscribed = new List<string>();
 		private readonly int _interval;
+
+		private readonly IHostApplicationLifetime _hostApplicationLifetime;
+
 		public BroadcastService(ISubscribtionService subscriptionService, 
 			IWebSocketClient webSocketClient, 
 			IQuoteWSCache quoteWSCache,
+			IHostApplicationLifetime hostApplicationLifetime,
 			IOptions<BroadcastOptions> broadcastOptions
 			) 
 		{
 			_subscriptionService = subscriptionService;
 			_webSocketClient = webSocketClient;
 			_quoteWSCache = quoteWSCache;
+			_hostApplicationLifetime = hostApplicationLifetime;
 			_interval = broadcastOptions?.Value?.Interval ?? 1000;
 		}
 
+		public async Task StartAsync(CancellationToken cancellationToken)
+		{
+			
+
+			await base.StartAsync(cancellationToken);
+		}
+
+
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
+			_hostApplicationLifetime.ApplicationStopping.Register(OnStopping);
+
 			await Task.Delay(START_DELAY);
 			_webSocketClient.Connect(); // we have no need to wait this
 
@@ -62,6 +80,30 @@ namespace FinancialInstruments.Api.BackgroundServices
 				}
 				await Task.Delay(_interval);
 			}
+
+			if(stoppingToken.IsCancellationRequested)
+			{
+				Log.Information("Finish service");
+			}
 		}
+
+		public override async Task StopAsync(CancellationToken cancellationToken)
+		{
+			Log.Warning("BroadcastService STOPPING: {time}", DateTimeOffset.Now);
+			await base.StopAsync(cancellationToken);
+		}
+
+		private void OnStopping()
+		{
+			Log.Warning("BroadcastService STOPPING: {time}", DateTimeOffset.Now);
+			var subscriptions = _subscriptionService.GetAllSubscriptions().Result.ToArray();
+			foreach (var webSocket in subscriptions.Select(sub => sub.WebSocket).Distinct())
+			{
+				webSocket.CloseOutputAsync(WebSocketCloseStatus.EndpointUnavailable,
+					"The service is shutting down",
+					CancellationToken.None);
+			}
+		}
+
 	}
 }
